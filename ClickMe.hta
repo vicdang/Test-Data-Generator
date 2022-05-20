@@ -1,0 +1,488 @@
+<html>
+<HTA:APPLICATION ID="Loremgenerator"
+APPLICATIONNAME="TestDataGenerator"
+BORDER="thin"
+BORDERSTYLE="static"
+INNERBORDER="no"
+MAXIMIZEBUTTON="no"
+MINIMIZEBUTTON="yes"
+WINDOWSTATE="normal"
+NAVIGATE="yes"
+CAPTION="yes"
+SELECTION="no"
+SHOWINTASKBAR="yes"
+SINGLEINSTANCE="yes"
+SYSMENU="yes"
+SCROLL="no"
+TITLEBAR="no"
+ICON=".\dict\icon\shark.ico"
+NAVIGABLE="true"
+SCROLLFLAT="yes"
+SCROLL="no"></HTA:APPLICATION>
+
+<script language="vbscript">
+winWidth=450
+winHeight=840
+padding=20
+window.resizeto winWidth,winHeight
+centerX=(screen.width-winWidth-padding) '/2'
+'centerY=(screen.height-winHeight-padding) '/2''
+centerY=(0+padding)
+window.moveto centerX,centerY
+posX=0
+posY=0
+move=0
+
+Function closeHTA()
+    self.close
+End Function
+
+Function setPos()
+    posX=window.event.screenX
+    posY=window.event.ScreenY
+    move=1
+End Function
+
+Function moving()
+    If move=1 Then
+        moveX=0
+        moveY=0
+        moveX=window.event.screenX-posX
+        moveY=window.event.screenY-posY
+        window.moveto(window.screenLeft+moveX),(window.screenTop+moveY)
+        setPos()    
+    End if
+End Function
+
+Function stopMoving()
+    move=0
+End Function
+
+Sub coppyToClipBoardVB(text)
+    window.clipboardData.setData "text", text
+End Sub
+
+</script>
+<HEAD>
+<!--<meta http-equiv="x-ua-compatible" content="ie=9">
+<meta http-equiv="x-ua-compatible" content="ie=edge">-->
+<meta http-equiv="X-UA-Compatible" content="IE=11">
+<meta charset="UTF-16">
+
+<!-- <HTA:application id="main" applicationName="CSS3 HTA" /> -->
+<!-- <style src="dict/css/style.css"></style> -->
+<link rel="stylesheet" type="text/css" href="style.css">
+<title>&nbsp;TestData Generator&nbsp;</title>
+<!--<script type="text/javascript">
+    window.resizeTo(300,350);
+</script>-->
+</HEAD>
+<!--<BODY onload="time()">-->
+
+<BODY id="main">
+    <!-- <DIV id="title" onmousedown="VBScript:Call setPos()" onmousemove="VBScript:Call moving()" onmouseup="VBScript:Call stopMoving()"> -->
+    <DIV id="title">
+        <label id="ltitle">&nbsp;TestData Generator&nbsp;</label>
+        <label id="exitButton" onMouseDown="VBScript:Call closeHTA()">
+            <a href="#"><strong>●</strong></a></label>
+    </DIV>
+    <hr>
+    <form id="inform">
+        <div id="lorem-textfield" class="field">
+            <ul>
+                <li>
+                    <fieldset>
+                        <legend>&nbsp;&nbsp;Text&nbsp;&nbsp;</legend>
+                        <ul>
+                            <li>
+                                <label class="lorem-text part-2">Prefix</label><span class="splitter"></span>
+                                <label class="lorem-text part-6">Text</label><span class="splitter"></span>
+                                <label class="lorem-text part-2">Suffix</label>
+                            </li>
+                            <li>
+                                <input id='lorem-text-prefix' type="text" name="lorem-text" class="lorem-text part-2" placeholder="Prefix" style="text-align:right;"><span class="splitter"></span>
+                                <input id='lorem-text-word' type="text" name="lorem-text" class="lorem-text part-6" placeholder="Text" style="text-align:center;"><span class="splitter"></span>
+                                <input id='lorem-text-suffix' type="text" name="lorem-text" class="lorem-text part-2" placeholder="Suffix" style="text-align:left;">
+                            </li>
+                            <li>
+                                <label class="lorem-text part-2">Num Word</label><span class="splitter"></span>
+                                <input id='lorem-text-minnum' type="number" name="lorem-text" class="lorem-text part-2" value="10"><span class="splitter"></span>
+                                <input id='lorem-text-gen' type="button" name="lorem-text" class="lorem-text button part-6" value="Alt + Q" accessKey="q" onClick="generateText('lorem-text-')">
+                                <!-- <p id="lorem-text-msg" class="copy-msg lorem-text">Coppied to Clipboard</p> -->
+                            </li>
+                        </ul>
+                    </fieldset>
+                </li>
+            </ul>
+        </div>
+        <div id="lorem-datefield" class="field">
+            <ul>
+                <li>
+                    <fieldset>
+                        <legend>&nbsp;&nbsp;Date&nbsp;&nbsp;</legend>
+                        <ul>
+                            <li>
+                                <label class="lorem-text part-2">From</label><span class="splitter"></span>
+                                <label class="lorem-text part-2">To</label><span class="splitter"></span>
+                                <label class="lorem-text part-6">Format</label>
+                            </li>
+                            <li>
+                                <input id='lorem-date-from' type="text" name="lorem-text" class="lorem-text part-2" value="01-01-1970"><span class="splitter"></span>
+                                <input id='lorem-date-to' type="text" name="lorem-text" class="lorem-text part-2" value=""><span class="splitter"></span>
+                                <select id="sldate" name="sldate" class="lorem-text part-6">
+                                    <option value="df1" selected>dddd,MM dd,yyyy</option>
+                                </select>
+                            </li>
+                            <li>
+                                <input id='lorem-date-value' type="text" name="lorem-text" class="lorem-text part-8" ><span class="splitter"></span>
+                                <input id='lorem-date-gen' type="button" name="lorem-text" class="lorem-text button part-2" value="Alt + W" accessKey="w" onClick="generateDate('lorem-date')">
+                                <!-- <p id="lorem-text-msg" class="copy-msg lorem-text">Coppied to Clipboard</p> -->
+                            </li>
+                        </ul>
+                    </fieldset>
+                </li>
+            </ul>
+        </div>
+        <div id="lorem-numfield" class="field">
+            <ul>
+                <li>
+                    <fieldset>
+                        <legend>&nbsp;&nbsp;Number&nbsp;&nbsp;</legend>
+                        <ul>
+                            <li>
+                                <label class="lorem-text part-2">Min</label><span class="splitter"></span>
+                                <label class="lorem-text part-2">Max</label><span class="splitter"></span>
+                                <label class="lorem-text part-3">Num</label><span class="splitter"></span>
+                                <label class="lorem-text part-2"></label>
+                            </li>
+                            <li>
+                                <input id='lorem-num-min' type="text" name="lorem-text" class="lorem-text part-2" value="0"><span class="splitter"></span>
+                                <input id='lorem-num-max' type="text" name="lorem-text" class="lorem-text part-2" value="9999"><span class="splitter"></span>
+                                <input id='lorem-num-value' type="text" name="lorem-text" class="lorem-text part-3" value=""><span class="splitter"></span>
+                                <input id='lorem-num-gen' type="button" name="lorem-text" class="lorem-text button part-2" value="Alt + E" accessKey="e" onClick="generateNumber('lorem-num')">
+                            </li>
+                        </ul>
+                    </fieldset>
+                </li>
+            </ul>
+        </div>
+        <div id="lorem-optfield" class="field">
+            <ul>
+                <li>
+                    <fieldset>
+                        <legend>&nbsp;&nbsp;Option&nbsp;&nbsp;</legend>
+                        <ul>
+                            <li>
+                                <label class="lorem-text part-2">City</label><span class="splitter"></span>
+                                <select id="slcity" name="slcity" class="lorem-text part-2">
+                                    <option value="US" class="part-10" selected>US</option>
+                                </select><span class="splitter"></span>
+                                <input id='lorem-opt-city' type="text" name="lorem-text" class="lorem-text part-3" placeholder="0"><span class="splitter"></span>
+                                <input id='lorem-text-gen' type="button" name="lorem-text" class="lorem-text button part-2" value="Alt + T" accessKey="t" onClick="generateCity('lorem-opt-city')">
+                            </li>
+                            <li>
+                                <label class="lorem-text part-2">Name</label><span class="splitter"></span>
+                                <select id="slname" name="slname" class="lorem-text part-2" onClick=''>
+                                    <option value="male" class="part-10" selected>Male</option>
+                                    <option value="female" class="part-10">Female</option>
+                                </select><span class="splitter"></span>
+                                <input id='lorem-opt-name' type="text" name="lorem-text" class="lorem-text part-3" placeholder="0"><span class="splitter"></span>
+                                <input id='lorem-text-gen' type="button" name="lorem-text" class="lorem-text button part-2" value="Alt + R" accessKey="r" onClick="generateName('lorem-opt-name')">
+                            </li>
+                            <li>
+                                <label class="lorem-text part-2">Character</label><span class="splitter"></span>
+                                <input id='lorem-opt-char-num' type="text" name="lorem-text" class="lorem-text part-2" value="10"><span class="splitter"></span>
+                                <input id='lorem-opt-char-value' type="text" name="lorem-text" class="lorem-text part-3" placeholder="0"><span class="splitter"></span>
+                                <input id='lorem-text-gen' type="button" name="lorem-text" class="lorem-text button part-2" value="Alt + A" accessKey="a" onClick="generateChar('lorem-opt-char')">
+                            </li>
+                            <li>
+                                <label class="lorem-text part-2">Phone</label><span class="splitter"></span>
+                                <select id="slphone" name="slphone" class="lorem-text part-2">
+                                    <option value="1" class="part-10" selected>US</option>
+                                </select><span class="splitter"></span>
+                                <input id='lorem-opt-phone' type="text" name="lorem-text" class="lorem-text part-3" placeholder="0"><span class="splitter"></span>
+                                <input id='lorem-text-gen' type="button" name="lorem-text" class="lorem-text button part-2" value="Alt + S" accessKey="s" onClick="generatePhone('lorem-opt-phone')">
+                            </li>
+                            <li>
+                                <label class="lorem-text part-2">Zip code</label><span class="splitter"></span>
+                                <input id='lorem-opt-zip' type="text" name="lorem-text" class="lorem-text part-6" placeholder="0"><span class="splitter"></span>
+                                <input id='lorem-text-gen' type="button" name="lorem-text" class="lorem-text button part-2" value="Alt + D" accessKey="d" onClick="generateZipcode('lorem-opt-zip')">
+                            </li>
+                            <li>
+                                <label class="lorem-text part-2">Country</label><span class="splitter"></span>
+                                <input id='lorem-opt-countryas' type="text" name="lorem-text" class="lorem-text part-1" placeholder="0"><span class="splitter"></span>
+                                <input id='lorem-opt-country' type="text" name="lorem-text" class="lorem-text part-5" placeholder="0"><span class="splitter"></span>
+                                <input id='lorem-text-gen' type="button" name="lorem-text" class="lorem-text button part-2" value="Alt + F" accessKey="f" onClick="generateCountry('lorem-opt-country')">
+                            </li>
+                            <li>
+                                <label class="lorem-text part-2">Email</label><span class="splitter"></span>
+                                <input id='lorem-opt-email' type="text" name="lorem-text" class="lorem-text part-6" placeholder="0"><span class="splitter"></span>
+                                <input id='lorem-text-gen' type="button" name="lorem-text" class="lorem-text button part-2" value="Alt + G" accessKey="g" onClick="generateEmail('lorem-opt-email')">
+                            </li>
+							<li>
+                                <label class="lorem-text part-2">VIN</label><span class="splitter"></span>
+                                <input id='lorem-opt-vin' type="text" name="lorem-text" class="lorem-text part-6" placeholder="0"><span class="splitter"></span>
+                                <input id='lorem-text-gen' type="button" name="lorem-text" class="lorem-text button part-2" value="Alt + H" accessKey="h" onClick="generateVin('lorem-opt-vin')">
+                            </li>
+                            <li>
+                                <label class="lorem-text part-2">LP</label><span class="splitter"></span>
+                                <input id='lorem-opt-licenseplate' type="text" name="lorem-text" class="lorem-text part-6" placeholder="0"><span class="splitter"></span>
+                                <input id='lorem-text-gen' type="button" name="lorem-text" class="lorem-text button part-2" value="Alt + X" accessKey="x" onClick="generateLicensePlate('lorem-opt-licenseplate')">
+                            </li>
+                            <li>
+                                <label class="lorem-text part-2">Choices</label><span class="splitter"></span>
+                                <input id='lorem-opt-choice-num' type="text" name="lorem-text" class="lorem-text part-2" value="10"><span class="splitter"></span>
+                                <input id='lorem-opt-choice-value' type="text" name="lorem-text" class="lorem-text part-3" placeholder="0"><span class="splitter"></span>
+                                <input id='lorem-text-gen' type="button" name="lorem-text" class="lorem-text button part-2" value="Alt + C" accessKey="c" onClick="generateChoice('lorem-opt-choice')">
+                            </li>
+                            <!-- <input type="file" id="file"/>
+                            <input type="button" onClick="getData('searchResults')" value="" />
+                            <div id="searchResults"></div> -->
+                        </ul>
+                    </fieldset>
+                </li>
+            </ul>
+        </div>
+        <p id="lorem-text-msg" class="copy-msg lorem-text">Data is Coppied to Clipboard</p>
+            <div>
+                <div>
+                    <br>
+                    <span type="button" id="theme-green" class="theme-btn" style="color:green;" onClick="changeTheme('green')">•</span>
+                    <span type="button" id="theme-yellow" class="theme-btn" style="color:yellow;" onClick="changeTheme('yellow')">•</span>
+                    <span type="button" id="theme-violet" class="theme-btn" style="color:purple;" onClick="changeTheme('violet')">•</span>
+                    <span type="button" id="theme-grey" class="theme-btn" style="color:grey;" onClick="changeTheme('grey')">•</span>
+                    <span type="button" id="theme-black" class="theme-btn" style="color:black;" onClick="changeTheme('black')">•</span>
+                    <span type="button" id="theme-white" class="theme-btn" style="color:white;" onClick="changeTheme('white')">•</span>
+                    <span type="button" id="theme-orange" class="theme-btn" style="color:orange;" onClick="changeTheme('orange')">•</span>
+                    <span type="button" id="theme-blue" class="theme-btn" style="color:blue;" onClick="changeTheme('blue')">•</span>
+                    <span type="button" id="theme-red" class="theme-btn" style="color:red;" onClick="changeTheme('red')">•</span>
+                    <span type="button" id="theme-pink" class="theme-btn" style="color:pink;" onClick="changeTheme('pink')">•</span>
+                    <hr>
+                    <p id='footer'><a href="mailto:dnnvu@tma.com.vn?Subject=TestData%20Generator" target="_top">2018©Vic</a></p>
+                </div>
+    </form>
+</BODY>
+<script type="text/javascript" src="dict/js/gendata.js"></script>
+<script type="text/javascript">
+gendata = new GenData("en");
+document.getElementById('lorem-date-to').value = getCurrentDate();
+
+var fdate = {"dd-mm-yyyy":"df2","dd/mm/dd":"df3","dd/mm/yyyy HH:mm:ss":"df4","yyyy-mm-dd":"df5","yyyy/mm/dd":"df6","yyyy/mm/dd HH:mm:ss":"df7"};
+
+addOptionToSelect("slcity",gendata.readDataIn("./data/countriesacro.txt",1));
+addOptionToSelect("slphone",gendata.readDataIn("./data/dial.txt",1));
+addOptionToSelect("sldate",fdate);
+
+function addOptionToSelect(id, arr){
+    select = document.getElementById(id);
+    select.inner
+    for (var key in arr) {
+        if (arr.hasOwnProperty(key)) {
+            var opt = document.createElement('option');
+            opt.value = arr[key];
+            opt.innerHTML = key;
+            select.appendChild(opt);
+        }
+    }
+};
+
+function generateText(id) {
+    ele_word = document.getElementById(id + 'word');
+    ele_prefix = document.getElementById(id + 'prefix');
+    ele_suffix = document.getElementById(id + 'suffix');
+    ele_num = document.getElementById(id + 'minnum');
+    exvalue = gendata.generateText(ele_num.value);
+    ele_word.value = exvalue;
+    genvalue = ele_prefix.value + exvalue + ele_suffix.value;
+    copyToClipboard(genvalue);
+};
+
+function generateDate(id){
+    document.getElementById('lorem-date-to').value = getCurrentDate();
+    var mindate = document.getElementById(id + '-from').value;
+    var maxdate = document.getElementById(id + '-to').value;
+    var genvalue = gendata.generateDate(mindate,maxdate);
+    var year = genvalue.getFullYear();
+    var month = checkTime(genvalue.getMonth()+1);
+    var day = checkTime(genvalue.getDate());
+    var hour = checkTime(genvalue.getHours());
+    var minute = checkTime(genvalue.getMinutes());
+    var second = checkTime(genvalue.getSeconds());
+    var e = document.getElementById("sldate");
+    var strfdate = e.options[e.selectedIndex].value;
+    switch(strfdate) {
+    case "df2":
+        var exvalue = day + "-" + month + "-" + year;
+        break;
+    case "df3":
+        var exvalue = day + "/" + month + "/" + year;
+        break;
+    case "df4":
+        var exvalue = day + "/" + month + "/" + year + " " + hour + ":" + minute + ":" + second;
+        break;
+    case "df5":
+        var exvalue = year + "-" + month + "-" + day;
+        break;
+    case "df6":
+        var exvalue = year + "/" + month + "/" + day;
+        break;
+    case "df7":
+        var exvalue = year + "/" + month + "/" + day + " " + hour + ":" + minute + ":" + second;
+        break;
+    default:
+        var exvalue = genvalue.toLocaleDateString();
+    }
+    document.getElementById(id + '-value').value = exvalue;
+    copyToClipboard(exvalue);
+}
+
+function generateNumber(id){
+    var min = document.getElementById(id + '-min').value;
+    var max = document.getElementById(id + '-max').value;
+    var value = gendata.generateNumber(min,max);
+    document.getElementById(id + "-value").value = value;
+    copyToClipboard(value);
+}
+
+function generateEmail(id) {
+    var gender = ["0", "1"];
+    var position = Math.floor(Math.random() * gender.length);
+    var gend = gender[position];
+    if (gend == "1"){
+        var name = gendata.generateMaleName();
+    } else {
+        var name = gendata.generateFemaleName();
+    }
+    var dot = Math.floor(Math.random() * gender.length);
+    var dott = gender[position];
+    if (dott == "0"){
+        name += "." + gendata.generateSumName();
+    }
+    var domain = gendata.generateCity();
+    var state = gendata.generateCoutryAcro();
+    var value = name + "@" + domain + ".com." + state;
+    document.getElementById(id).value = Trim(value.toLowerCase());
+    copyToClipboard(Trim(value.toLowerCase()));
+}
+
+function generateChar(id) {
+    var len = document.getElementById(id + "-num").value
+    var value = gendata.generateCharSet(len);
+    document.getElementById(id + "-value").value = value;
+    copyToClipboard(value);
+}
+
+function generateZipcode(id){
+    var zip = Math.floor(Math.random() * 90000) + 10000;
+    document.getElementById(id).value = zip;
+    copyToClipboard(zip.toString());
+}
+
+function generateCountry(id){
+    var value = gendata.generateCountry();
+    document.getElementById(id).value = value[1];
+    document.getElementById(id + 'as').value = value[0];
+    copyToClipboard('(' + value[0]+') '+value[1]);
+}
+
+function generateCity(id){
+    var e = document.getElementById("slcity");
+    var strcity = e.options[e.selectedIndex].value;
+    var value = gendata.generateCity(strcity);
+    document.getElementById(id).value = value;
+    copyToClipboard(value);
+}
+
+function generateName(id){
+    var sumname = gendata.generateSumName();
+    var e = document.getElementById("slname");
+    var strname = e.options[e.selectedIndex].value;
+    switch(strname) {
+    case "female":
+        var name = gendata.generateFemaleName();
+        break;
+    case "male":
+        var name = gendata.generateMaleName();
+        break;
+    }
+    var exname = name + " " + sumname;
+    document.getElementById(id).value = exname;
+    copyToClipboard(exname);
+}
+
+function generatePhone(id){
+    var phonenumber = gendata.generatePhoneNumber();
+    var e = document.getElementById("slphone");
+    var phonedial = e.options[e.selectedIndex].value;
+    // var phonedial = gendata.generateDialCode();
+    var value = "(+" + phonedial + ") " + phonenumber;
+    document.getElementById(id).value = value;
+    copyToClipboard(value);
+}
+
+function generateVin(id){
+    var value = gendata.generateVin();
+    document.getElementById(id).value = value;
+    copyToClipboard(value);
+}
+
+function generateLicensePlate(id){
+    var value = gendata.generateLicensePlate();
+    document.getElementById(id).value = value;
+    copyToClipboard(value);
+}
+
+function generateChoice(id) {
+    var len = document.getElementById(id + "-num").value;
+    var value = '';
+    for (var i = 0; i <= len; i++) {
+        value += i + ':' + gendata.generateText(1) + ',';
+    };
+    value = value.slice(',', -1);
+    document.getElementById(id + "-value").value = value;
+    copyToClipboard(value);
+}
+
+function getData(id){
+    var path = document.getElementById("file").value;
+    var value = gendata.readData(path);
+    document.getElementById(id).value = value;
+}
+
+function Trim(x) {
+    return x.replace(/ /gm,'');
+}
+
+function getCurrentDate(){
+    var currentDate = new Date();
+    var day = checkTime(currentDate.getDate());
+    var month = checkTime(currentDate.getMonth() + 1);
+    var year = currentDate.getFullYear();
+    return day + "-" + month + "-" + year;
+}
+
+function copyToClipboard(text) {
+    coppyToClipBoardVB(text);
+    var state = document.getElementById('lorem-text-msg').style.visibility;
+    if (state != "visible"){
+        document.getElementById('lorem-text-msg').style.visibility = "visible";
+        setTimeout(function(){document.getElementById('lorem-text-msg').style.visibility = "hidden";}, 3000);
+    }
+}
+
+function checkTime(i) {
+    return (i<10?"0"+i:i);
+};
+
+function changeTheme(color){
+    document.body.style.backgroundImage = 'url(dict/img/' + color + '.jpg)';
+}
+
+Object.keys = Object.keys || function keys(obj) {
+  var ret = [];
+  for (var prop in obj) if (obj.hasOwnProperty(prop)) ret.push(prop)
+  return ret;
+}
+
+</script>
+</html>
